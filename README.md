@@ -1,260 +1,165 @@
-ZKRCrud - Laravel RESTful API Generator
-🚀 A Laravel package for rapid API development with built-in CRUD, query filtering, validation, and authorization.
+# ZKRCrud - Laravel RESTful API Generator Package
 
-Table of Contents
-Features
+![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
+![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)
+![License](https://img.shields.io/packagist/l/larapi/zkrcrud?style=for-the-badge)
 
-Installation
+ZKRCrud is a powerful Laravel package that **automates RESTful API development** with built-in CRUD operations, advanced filtering, and policy-based authorization. Perfect for rapid API development with Laravel 10+.
 
-Basic Usage
+## ✨ Key Features
 
-API Endpoints
+- 🚀 **Auto-generated CRUD endpoints**
+- 🔒 **Policy-based authorization**
+- 🔍 **Advanced query filtering** (Spatie Query Builder)
+- ✅ **Automatic request validation**
+- 📊 **Smart pagination**
+- 🛡️ **Comprehensive error handling**
+- 🔄 **Pre/post operation hooks**
 
-Query Parameters
+## 📦 Installation
 
-Validation & Authorization
-
-Hooks
-
-Error Handling
-
-Configuration
-
-Examples
-
-Contributing
-
-License
-
-Features
-✔ Auto-generated CRUD endpoints
-✔ Built-in Policy-based authorization
-✔ Advanced filtering, sorting & includes (Spatie Query Builder)
-✔ Request validation (custom rules or FormRequest support)
-✔ Pre/Post operation hooks
-✔ Pagination & field selection
-✔ Consistent error handling
-
-Installation
 Install via Composer:
 
-bash
+```bash
 composer require larapi/zkrcrud
-Basic Usage
-1. Create a Controller
-Extend ZkrController and configure your model:
 
-php
-<?php
+🚀 Quick Start
+1. Create Controller
+```
+```php
 
+<?php 
 namespace App\Http\Controllers;
 
 use Larapi\Zkrcrud\Http\Controllers\ZkrController;
-use App\Models\Post;
+use App\Models\Product;
 
-class PostController extends ZkrController
+class ProductController extends ZkrController
 {
-    protected $model = Post::class;
+    protected $model = Product::class;
     
-    protected $allowedIncludes = ['author', 'comments'];
-    protected $allowedFilters = ['title', 'status'];
-    protected $allowedSorts = ['created_at', 'title'];
-    protected $allowedFields = ['id', 'title', 'content'];
+    protected $allowedIncludes = ['category', 'reviews'];
+    protected $allowedFilters = ['name', 'price', 'in_stock'];
+    protected $allowedSorts = ['created_at', 'price'];
+    protected $allowedFields = ['id', 'name', 'price'];
     
-    // Optional: Custom validation rules
     protected function rules(): array
     {
         return [
-            'title' => 'required|string|max:255',
-            'content' => 'required|string',
+            'name' => 'required|string|max:100',
+            'price' => 'required|numeric|min:0',
         ];
     }
-    
-    // Optional: Use a custom FormRequest
-    protected ?string $requestClass = \App\Http\Requests\PostRequest::class;
 }
+```
 2. Define Routes
-php
-use App\Http\Controllers\PostController;
 
-Route::apiResource('posts', PostController::class);
-API Endpoints
-Method	Endpoint	Description
-GET	/posts	List all posts (paginated)
-GET	/posts/{id}	Get a single post
-POST	/posts	Create a new post
-PUT	/posts/{id}	Update a post
-DELETE	/posts/{id}	Delete a post
-Query Parameters
-1. Filtering
-http
-GET /posts?filter[status]=published&filter[author_id]=1
-2. Including Relationships
-http
-GET /posts?include=author,comments
-3. Sorting
-http
-GET /posts?sort=-created_at,title  # `-` for descending
-4. Field Selection
-http
-GET /posts?fields[posts]=id,title
-5. Pagination
-http
-GET /posts?per_page=20
-Validation & Authorization
-1. Validation
-Use rules() method for basic validation:
+```php
+<?php
+use App\Http\Controllers\ProductController;
 
-php
-protected function rules(): array
-{
-    return [
-        'title' => 'required|string|max:255',
-    ];
-}
-Or use a custom FormRequest:
+Route::apiResource('products', ProductController::class);
+```
 
-php
-protected ?string $requestClass = \App\Http\Requests\PostRequest::class;
-2. Authorization (Policies)
-Automatically checks for:
+## 2. Define Routes
 
-viewAny → index()
+```php
+use App\Http\Controllers\ProductController;
 
-view → show()
+Route::apiResource('products', ProductController::class);
+```
 
-create → store()
+🔍 API Endpoints
 
-update → update()
+Method | Endpoint | Description
+GET | /products | Paginated product list
+GET | /products/{id} | Get single product
+POST | /products | Create new product
+PUT | /products/{id} | Update product
+DELETE | /products/{id} | Delete product
 
-delete → destroy()
+⚙️ Advanced Usage
 
-Example Policy:
+Query Filtering
 
-php
-public function update(User $user, Post $post)
-{
-    return $user->id === $post->user_id;
-}
-Hooks
-Override these methods for custom logic:
+```http
+GET /products?filter[price][gt]=100&include=category&sort=-created_at
+```
 
-php
+Supported Parameters:
+
+include – Load relationships
+
+filter – Filter by fields
+
+sort – Sort results (- prefix for DESC)
+
+fields – Select specific fields
+
+per_page – Items per page (pagination)
+
+🛠️ Custom Hooks
+Example usage of hooks inside the controller:
+
+```php
+
 protected function beforeStore(Request $request)
 {
-    // Runs before creating a record
-}
-
-protected function afterStore($model, Request $request)
-{
-    // Runs after creating a record
-}
-
-protected function beforeUpdate($model, Request $request)
-{
-    // Runs before updating a record
+    // Logic before creation
+    $request->merge(['created_by' => auth()->id()]);
 }
 
 protected function afterUpdate($model, Request $request)
 {
-    // Runs after updating a record
+    // Logic after update
+    $model->history()->create($request->all());
 }
+```
 
-protected function beforeDestroy($model)
-{
-    // Runs before deleting a record
+🔒 Authorization
+Automatically checks the following policy methods:
+
+
+Action	Policy Method
+List	viewAny
+View	view
+Create	create
+Update	update
+Delete	delete
+
+🛠️ Configuration
+Required:
+
+```php
+<?php
+class YourController extends Controller{
+protected $model = YourModel::class;
+protected ?string $requestClass = CustomRequest::class;
+protected array $allowedIncludes = [];
+protected array $allowedFilters = [];
+protected array $allowedSorts = [];
+protected array $allowedFields = [];
+/// rest of the code
 }
+```
 
-protected function afterDestroy($model)
-{
-    // Runs after deleting a record
-}
-Error Handling
-Status Code	Description
-200 OK	Successful GET request
-201 Created	Resource created
-204 No Content	Resource deleted
-401 Unauthorized	Missing/invalid token
-403 Forbidden	Policy denied the action
-404 Not Found	Resource not found
-422 Unprocessable Entity	Validation failed
-500 Internal Server Error	Server error
-Example Error Response:
+Optional:
+```php
 
-json
-{
-    "message": "Invalid query parameters",
-    "errors": {
-        "filter": ["Invalid filter: invalid_field"]
-    }
-}
-Configuration
-Property	Description	Example
-$model	Required model class	Post::class
-$requestClass	Custom FormRequest	PostRequest::class
-$allowedIncludes	Allowed relationships	['author', 'comments']
-$allowedFilters	Allowed filter fields	['status', 'author_id']
-$allowedSorts	Allowed sort fields	['created_at', 'title']
-$allowedFields	Allowed selected fields	['id', 'title']
-Examples
-1. Creating a Post
-Request:
+protected ?string $requestClass = CustomRequest::class;
+protected array $allowedIncludes = [];
+protected array $allowedFilters = [];
+protected array $allowedSorts = [];
+protected array $allowedFields = [];
+```
+🛠️ System Requirements
+PHP 8.1+
 
-http
-POST /posts
-Content-Type: application/json
+Laravel 10+
 
-{
-    "title": "Hello World",
-    "content": "This is a test post."
-}
-Response (201 Created):
+Composer 2.0+
 
-json
-{
-    "data": {
-        "id": 1,
-        "title": "Hello World",
-        "content": "This is a test post.",
-        "created_at": "2025-01-01T00:00:00.000000Z"
-    }
-}
-2. Filtering & Sorting
-Request:
 
-http
-GET /posts?filter[status]=published&sort=-created_at&include=author
-Response (200 OK):
-
-json
-{
-    "data": [
-        {
-            "id": 1,
-            "title": "Latest Post",
-            "status": "published",
-            "author": {
-                "id": 1,
-                "name": "John Doe"
-            }
-        }
-    ],
-    "links": {
-        "first": "/posts?page=1",
-        "last": "/posts?page=1",
-        "prev": null,
-        "next": null
-    },
-    "meta": {
-        "current_page": 1,
-        "per_page": 15,
-        "total": 1
-    }
-}
-Contributing
-Pull requests are welcome! For major changes, open an issue first.
-
-License
-MIT
-
-🚀 Happy Coding! 🚀
+🤝 Contributing
+Pull requests are welcome!
+Please follow PSR-12 coding standards.

@@ -1,9 +1,10 @@
 {
+    "$schema": "https://getcomposer.org/schema.json",
     "name": "larapi/zkrcrud",
     "description": "A Laravel package to simplify the creation of RESTful APIs, similar to Orion.",
     "type": "library",
+    "keywords": ["laravel", "framework"],
     "license": "MIT",
-    "version": "1.0.0",
     "authors": [
         {
             "name": "gufran khan",

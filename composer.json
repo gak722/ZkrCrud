@@ -3,6 +3,7 @@
     "description": "A Laravel package to simplify the creation of RESTful APIs, similar to Orion.",
     "type": "library",
     "license": "MIT",
+    "version": "1.0.0",
     "authors": [
         {
             "name": "gufran khan",
@@ -22,7 +23,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "larapi\\zkrcrud\\ZkrServiceProvider"
+                "Larapi\\Zkrcrud\\ZkrServiceProvider"
             ]
         }
     },

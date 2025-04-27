@@ -18,7 +18,7 @@
     },
     "autoload": {
         "psr-4": {
-            "larapi\\ZkrCrud\\": "src/"
+            "Larapi\\Zkrcrud\\": "src/"
         }
     },
     "extra": {
@@ -28,6 +28,6 @@
             ]
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true
 }

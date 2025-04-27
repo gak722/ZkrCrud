@@ -1,0 +1,31 @@
+{
+    "name": "larapi/zkrcrud",
+    "description": "A Laravel package to simplify the creation of RESTful APIs, similar to Orion.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "gufran khan",
+            "email": "gak72@rediffmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.1",
+        "laravel/framework": "^12.0",
+         "spatie/laravel-query-builder": "^6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "larapi\\ZkrCrud\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "larapi\\zkrcrud\\ZkrServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

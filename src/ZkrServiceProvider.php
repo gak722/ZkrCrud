@@ -1,6 +1,6 @@
 <?php
 
-namespace Gufran;
+namespace Larapi\Zkrcrud;
 
 use Illuminate\Support\ServiceProvider;
 

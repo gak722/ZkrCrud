@@ -28,7 +28,6 @@
             ]
         }
     },
-    "minimum-stability": "alpha",
-    "prefer-stable": true,
-    "version": "1.2.0-alpha"
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

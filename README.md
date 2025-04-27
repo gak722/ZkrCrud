@@ -2,7 +2,7 @@
 
 ![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
 ![PHP](https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white)
-![License](https://img.shields.io/packagist/l/larapi/zkrcrud?style=for-the-badge)
+![License](https://opensource.org/licenses/MIT)
 
 ZKRCrud is a powerful Laravel package that **automates RESTful API development** with built-in CRUD operations, advanced filtering, and policy-based authorization. Perfect for rapid API development with Laravel 10+.
 
